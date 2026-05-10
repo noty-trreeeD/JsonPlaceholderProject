@@ -1,73 +1,220 @@
-# React + TypeScript + Vite
+# JSONPlaceholder React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебное React-приложение для практики работы с API на примере JSONPlaceholder.
 
-Currently, two official plugins are available:
+Проект сделан для отработки базовых и важных вещей в React:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- работа с серверными данными
+- Структурой FSD
+- маршрутизация
+- Material UI
+- TypeScript
+- разделение логики по папкам
 
-## React Compiler
+## Стек
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- Vite
+- pnpm
+- React Router
+- Material UI
+- JSONPlaceholder API
 
-## Expanding the ESLint configuration
+## Установка
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+  pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Запуск проекта
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+  pnpm dev
 ```
+
+После запуска проект будет доступен по адресу:
+
+```txt
+http://localhost:5173
+```
+
+## Сборка проекта
+
+```bash
+  pnpm build
+```
+
+## Предпросмотр production-сборки
+
+```bash
+  pnpm preview
+```
+
+## Структура проекта
+
+```txt
+src/
+  app/
+    App.tsx
+    prodivers.tsx
+    router.tsx
+    theme.ts
+
+  layouts/
+    MainLayout.tsx
+
+  pages/
+    HomePage.tsx
+    PostsPage.tsx
+    PostDetailsPage.tsx
+    UsersPage.tsx
+    TodosPage.tsx
+    NotFoundPage.tsx
+
+  features/
+    posts/
+      api/
+        postsApi.ts
+      components/
+        PostList.tsx
+        PostCard.tsx
+      types/
+        post.ts
+
+    comments/
+      types/
+        comment.ts
+
+  shared/
+    api/
+      client.ts
+    ui/
+      ErrorMessage.tsx
+      Loader.tsx
+      EmptyState.tsx
+```
+
+## Архитектурная идея
+
+Проект разделён по смысловым слоям:
+
+### `app`
+
+Глобальная настройка приложения:
+
+* роутер
+* корневой компонент
+* провайдеры
+
+### `layouts`
+
+Общие layout-компоненты приложения.
+
+Например:
+
+* верхняя панель
+* боковое меню
+* область для страниц
+
+### `pages`
+
+Страницы приложения.
+
+Страница отвечает за:
+
+* загрузку данных
+* состояние загрузки
+* состояние ошибки
+* передачу данных в компоненты
+
+### `features`
+
+Фичи приложения, сгруппированные по сущностям.
+
+Например:
+
+* posts
+* users
+* comments
+* todos
+
+Внутри каждой фичи могут быть:
+
+* api
+* components
+* types
+
+### `shared`
+
+Переиспользуемые части проекта:
+
+* общий api-клиент
+* UI-компоненты
+* утилиты
+
+## Принцип работы с API
+
+Компоненты не делают `fetch` напрямую.
+
+Вместо этого используется отдельный api-слой:
+
+```txt
+PostsPage
+  ↓
+getPosts()
+  ↓
+apiClient("/posts")
+  ↓
+JSONPlaceholder API
+```
+
+Это помогает не смешивать UI и работу с сервером.
+
+## JSONPlaceholder
+
+В проекте используется публичное тестовое API:
+
+```txt
+https://jsonplaceholder.typicode.com
+```
+
+Основные эндпоинты:
+
+```txt
+/posts
+/posts/:id
+/posts/:id/comments
+/users
+/todos
+```
+
+## Основной поток данных
+
+```txt
+Пользователь открывает страницу
+        ↓
+Страница вызывает функцию API
+        ↓
+Данные загружаются с сервера
+        ↓
+Данные сохраняются в state
+        ↓
+React делает re-render
+        ↓
+Компоненты отображают новые данные
+```
+
+## Цель проекта
+
+Главная цель проекта — закрепить базовые навыки React-разработки:
+
+* работа с компонентами
+* работа с props
+* работа с state
+* работа с `useEffect`
+* запросы к серверу
+* обработка loading/error
+* роутинг
+* структурирование проекта
+* использование MUI
