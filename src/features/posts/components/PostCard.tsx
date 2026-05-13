@@ -53,7 +53,6 @@ export const PostCard = ({post}: PostCardProps) => {
                         sx={{
                             display: "-webkit-box",
                             WebkitLineClamp: 3,
-                            WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                         }}
                     >
