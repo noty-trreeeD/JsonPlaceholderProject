@@ -4,7 +4,8 @@ import {
     PostDetailCard,
     getPostById,
     getPostComments,
-    CommentList
+    CommentList, getUserById,
+    type User
 } from "../features";
 import { useEffect, useState } from "react";
 import { Loader, ErrorMessage } from "../shared";
@@ -16,6 +17,7 @@ export function PostDetailsPage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [comments, setComments] = useState<PostComment[]>([]);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         async function loadPostByPostId() {
@@ -24,6 +26,7 @@ export function PostDetailsPage() {
                 setError(null);
                 setPost(null);
                 setComments([]);
+                setUser(null);
 
                 if (!postId) {
                     throw new Error("ID поста не найден");
@@ -40,8 +43,11 @@ export function PostDetailsPage() {
                     getPostComments(id),
                 ]);
 
+                const userAuthor = await getUserById(data.userId)
+
                 setPost(data);
                 setComments(commentsData);
+                setUser(userAuthor);
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Неизвестная ошибка");
             } finally {
@@ -68,7 +74,7 @@ export function PostDetailsPage() {
 
             {!isLoading && !error && post && (
                 <>
-                    <PostDetailCard post={post} />
+                    <PostDetailCard post={post} author={user ?? undefined} />
 
                     <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
                         Комментарии

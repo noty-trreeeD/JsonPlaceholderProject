@@ -1,19 +1,20 @@
 import {
     Card,
-    Box,
     CardContent,
-    Chip,
     Stack,
     Typography, CardActions, Button
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import type {Post} from "../types/post";
+import type { Post } from "../types/post";
+import type { User } from "../../users/types/user";
+import { AuthorBadge } from "../../users/components/AuthorBadge";
 
 type PostCardProps = {
     post: Post;
+    author?: User;
 }
 
-export const PostCard = ({post}: PostCardProps) => {
+export const PostCard = ({post, author}: PostCardProps) => {
     return (
         <Card
             variant="outlined"
@@ -29,14 +30,7 @@ export const PostCard = ({post}: PostCardProps) => {
         >
             <CardContent>
                 <Stack spacing={2}>
-                    <Box>
-                        <Chip
-                            label={`User ${post.userId}`}
-                            size="small"
-                            color="primary"
-                            variant="outlined"
-                        />
-                    </Box>
+                    <AuthorBadge author={author} fallbackUserId={post.userId} />
                     <Typography
                         variant="h6"
                         component="h2"

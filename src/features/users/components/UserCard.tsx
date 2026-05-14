@@ -2,7 +2,6 @@ import {
     Card,
     CardContent,
     Typography,
-    Chip,
     Stack,
     Divider,
     Box,
@@ -14,6 +13,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import BusinessIcon from "@mui/icons-material/Business";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import type { User } from "../types/user";
+import { AuthorBadge } from "./AuthorBadge";
 
 type UserCardProps = {
     user: User;
@@ -37,18 +37,8 @@ export const UserCard = ({ user }: UserCardProps) => {
                 <Stack spacing={2}>
                     <Box>
                         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                            <Chip
-                                label={`@${user.username}`}
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                            />
-                            <Chip
-                                label={`User #${user.id}`}
-                                size="small"
-                                color="primary"
-                                variant="outlined"
-                            />
+                            <AuthorBadge author={user} fallbackUserId={user.id} />
+
                         </Stack>
 
                         <Typography
@@ -59,7 +49,7 @@ export const UserCard = ({ user }: UserCardProps) => {
                                 lineHeight: 1.3,
                             }}
                         >
-                            {user.name}
+                            {user.username}
                         </Typography>
                     </Box>
 

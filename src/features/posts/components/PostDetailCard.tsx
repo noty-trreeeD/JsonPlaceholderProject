@@ -8,17 +8,19 @@ import {
     Button,
     Divider,
     Box,
-    Grid
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import type { Post } from "../types/post";
+import type { User } from "../../users/types/user";
+import { AuthorBadge } from "../../users/components/AuthorBadge";
 
 type PostDetailCardProps = {
     post: Post;
+    author?: User;
 };
 
-export const PostDetailCard = ({ post }: PostDetailCardProps) => {
+export const PostDetailCard = ({ post, author }: PostDetailCardProps) => {
     return (
         <Card
             variant="outlined"
@@ -38,11 +40,7 @@ export const PostDetailCard = ({ post }: PostDetailCardProps) => {
                                 variant="outlined"
                             />
 
-                            <Chip
-                                label={`User ${post.userId}`}
-                                size="small"
-                                variant="outlined"
-                            />
+                            <AuthorBadge author={author} fallbackUserId={post.userId} />
                         </Stack>
 
                         <Typography
@@ -82,11 +80,6 @@ export const PostDetailCard = ({ post }: PostDetailCardProps) => {
                     Назад к постам
                 </Button>
             </CardActions>
-            <Grid>
-                <Box>
-
-                </Box>
-            </Grid>
         </Card>
     );
 };

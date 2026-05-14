@@ -9,12 +9,14 @@ import {
     useMemo,
     memo,
 } from "react";
+import type {User} from "../../index";
 
 type PostListProps = {
     postPromise: Promise<Post[]>;
+    usersPromise: Promise<User[]>;
 };
 
-const HeavyPostGrid = memo(function HeavyPostGrid({ posts }: { posts: Post[] }) {
+const HeavyPostGrid = memo(function HeavyPostGrid({ posts, users }: { posts: Post[]; users: User[] }) {
     const renderedPosts = useMemo(() => {
         return [
             ...posts,
@@ -31,8 +33,9 @@ const HeavyPostGrid = memo(function HeavyPostGrid({ posts }: { posts: Post[] }) 
 
     return (
         <>
-            {renderedPosts.map((post, index) => (
-                <Grid
+            {renderedPosts.map((post, index) => {
+                const author = users.find((user) => user.id === post.userId);
+                return (<Grid
                     key={`${post.id}-${index}`}
                     size={{
                         xs: 12,
@@ -40,17 +43,19 @@ const HeavyPostGrid = memo(function HeavyPostGrid({ posts }: { posts: Post[] }) 
                         md: 4,
                     }}
                 >
-                    <PostCard post={post} />
+                    <PostCard post={post} author={author} />
                 </Grid>
-            ))}
+                );
+            })}
         </>
     );
 });
 
-export const PostList = ({ postPromise }: PostListProps) => {
+export const PostList = ({ postPromise, usersPromise }: PostListProps) => {
     const posts = use(postPromise);
+    const users = use(usersPromise)
 
-    const [sortBy, setSortBy] = useState<"asc" | "desc">("desc");
+    const [sortBy, setSortBy] = useState<"asc" | "desc">("asc");
 
     const deferredSortBy = useDeferredValue(sortBy);
 
@@ -82,7 +87,7 @@ export const PostList = ({ postPromise }: PostListProps) => {
                     Сортировать: {sortBy} {isStale ? "..." : ""}
                 </button>
             </Box>
-            {isStale ? <Loader /> : <HeavyPostGrid posts={sortedPosts} />}
+            {isStale ? <Loader /> : <HeavyPostGrid posts={sortedPosts} users={users}/>}
         </Grid>
     );
 };
