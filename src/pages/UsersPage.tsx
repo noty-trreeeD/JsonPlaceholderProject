@@ -1,10 +1,8 @@
 import { Typography } from "@mui/material";
-import { Loader } from "../shared/ui/Loader";
-import { ErrorMessage } from "../shared/ui/ErrorMessage";
-import { UsersList } from "../features/users/components/UsersList";
+import { Loader, ErrorMessage } from "../shared";
+import { UserList, getUsers } from "../features";
 import { useEffect, useState } from "react";
-import type { User } from "../features/users/types/user";
-import { getUsers } from "../features/users/api/UsersApi";
+import type { User } from "../features";
 
 export function UsersPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +45,7 @@ export function UsersPage() {
 
             {!isLoading && !error && users && (
                 <>
-                    <UsersList users={users} />
+                    <UserList users={users} />
                 </>
             )}
 

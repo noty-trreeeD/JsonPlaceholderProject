@@ -1,9 +1,9 @@
 import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
-import * as React from "react";
+import type { ReactNode } from "react";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
-import { PostList } from "../features/posts/components/PostList";
-import { getPosts } from "../features/posts/api/postsApi";
-import { Loader } from "../shared/ui/Loader"
+import { PostList, getPosts } from "../features";
+import { Loader } from "../shared"
 
 const postsPromise = getPosts();
 

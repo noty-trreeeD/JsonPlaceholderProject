@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-
-import { MainLayout } from "../layouts/MainLayout";
-
-import { HomePage } from "../pages/HomePage";
-import { PostsPage } from "../pages/PostsPage";
-import { PostDetailsPage } from "../pages/PostDetailsPage";
-import { UsersPage } from "../pages/UsersPage";
-import { TodosPage } from "../pages/TodosPage";
-import { NotFoundPage } from "../pages/NotFoundPage";
+import { MainLayout } from "./MainLayout";
+import {
+    HomePage,
+    PostsPage,
+    PostDetailsPage,
+    UsersPage,
+    TodosPage,
+    NotFoundPage
+} from "../pages";
 
 export const router = createBrowserRouter([
     {

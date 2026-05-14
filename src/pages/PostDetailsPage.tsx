@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
-import { PostDetailCard } from "../features/posts/components/PostDetailCard";
+import {
+    PostDetailCard,
+    getPostById,
+    getPostComments,
+    CommentList
+} from "../features";
 import { useEffect, useState } from "react";
-import { getPostById, getPostComments } from "../features/posts/api/postsApi";
-import { Loader } from "../shared/ui/Loader";
-import { ErrorMessage } from "../shared/ui/ErrorMessage";
-import { CommentList } from "../features/comments/components/CommentList";
-import type { Post } from "../features/posts/types/post";
-import type { Comment as PostComment } from "../features/comments/types/comment";
+import { Loader, ErrorMessage } from "../shared";
+import type { Comment as PostComment, Post } from "../features";
 
 export function PostDetailsPage() {
     const { postId } = useParams();

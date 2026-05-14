@@ -6,7 +6,7 @@ type UsersListProps = {
     users: User[];
 };
 
-export const UsersList = ({ users }: UsersListProps) => {
+export const UserList = ({ users }: UsersListProps) => {
     return (
         <Grid container spacing={2}>
             {users.map((user) => (

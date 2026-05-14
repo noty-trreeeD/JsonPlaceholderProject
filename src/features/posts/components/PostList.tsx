@@ -1,7 +1,7 @@
 import { Grid, Box } from "@mui/material";
 import type { Post } from "../types/post";
 import { PostCard } from "./PostCard";
-import { Loader } from "../../../shared/ui/Loader";
+import { Loader } from "../../../shared";
 import {
     use,
     useState,
