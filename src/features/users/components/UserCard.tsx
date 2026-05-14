@@ -5,7 +5,7 @@ import {
     Stack,
     Divider,
     Box,
-    Link,
+    Link, Button, CardActions,
 } from '@mui/material'
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -14,6 +14,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import type { User } from "../types/user";
 import { AuthorBadge } from "./AuthorBadge";
+import { Link as RouterLink } from "react-router-dom";
 
 type UserCardProps = {
     user: User;
@@ -110,6 +111,16 @@ export const UserCard = ({ user }: UserCardProps) => {
                     </Box>
                 </Stack>
             </CardContent>
+            <CardActions sx={{ px: 2, pb: 2}}>
+                <Button
+                    component={RouterLink}
+                    to={`/users/${user.id}`}
+                    variant="contained"
+                    size="small"
+                >
+                    Подробнее
+                </Button>
+            </CardActions>
         </Card>
     );
 };

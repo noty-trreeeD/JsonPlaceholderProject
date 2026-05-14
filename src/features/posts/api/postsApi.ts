@@ -11,3 +11,7 @@ export function getPostById(id: number) {
 export function getPostComments(id: number) {
     return apiClient(`/posts/${id}/comments`);
 }
+
+export function getPostsByUserId(userId: number) {
+    return apiClient(`/posts?${userId}`);
+}
