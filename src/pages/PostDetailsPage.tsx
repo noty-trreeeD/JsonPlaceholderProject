@@ -1,17 +1,20 @@
 import { useParams } from "react-router-dom";
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 import { PostDetailCard } from "../features/posts/components/PostDetailCard";
-import {useEffect, useState} from "react";
-import type {Post} from "../features/posts/types/post";
-import {getPostById } from "../features/posts/api/postsApi";
-import {Loader} from "../shared/ui/Loader.tsx";
-import {ErrorMessage} from "../shared/ui/ErrorMessage";
+import { useEffect, useState } from "react";
+import { getPostById, getPostComments } from "../features/posts/api/postsApi";
+import { Loader } from "../shared/ui/Loader";
+import { ErrorMessage } from "../shared/ui/ErrorMessage";
+import { CommentList } from "../features/comments/components/CommentList";
+import type { Post } from "../features/posts/types/post";
+import type { Comment as PostComment } from "../features/comments/types/comment";
 
 export function PostDetailsPage() {
     const { postId } = useParams();
     const [post, setPost] =useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [comments, setComments] = useState<PostComment[]>([]);
 
     useEffect(() => {
         async function loadPostByPostId() {
@@ -19,6 +22,7 @@ export function PostDetailsPage() {
                 setIsLoading(true);
                 setError(null);
                 setPost(null);
+                setComments([]);
 
                 if (!postId) {
                     throw new Error("ID поста не найден");
@@ -30,9 +34,13 @@ export function PostDetailsPage() {
                     throw new Error("Некорректный ID поста");
                 }
 
-                const data = await getPostById(id);
+                const [data, commentsData] = await Promise.all([
+                    getPostById(id),
+                    getPostComments(id),
+                ]);
 
                 setPost(data);
+                setComments(commentsData);
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Неизвестная ошибка");
             } finally {
@@ -58,7 +66,15 @@ export function PostDetailsPage() {
             )}
 
             {!isLoading && !error && post && (
-                <PostDetailCard post={post} userId={post.userId} title={post.title} body={post.body} id={post.id}/>
+                <>
+                    <PostDetailCard post={post} />
+
+                    <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
+                        Комментарии
+                    </Typography>
+
+                    <CommentList comments={comments} />
+                </>
             )}
 
         </>
