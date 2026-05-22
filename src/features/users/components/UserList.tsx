@@ -1,12 +1,15 @@
 import { Grid } from "@mui/material";
 import type { User } from "../types/user";
 import { UserCard } from "./UserCard";
+import { use } from "react";
 
 type UsersListProps = {
-    users: User[];
+    usersPromise: Promise<User[]>;
 };
 
-export const UserList = ({ users }: UsersListProps) => {
+export const UserList = ({ usersPromise }: UsersListProps) => {
+    const users = use(usersPromise);
+
     return (
         <Grid container spacing={2}>
             {users.map((user) => (
