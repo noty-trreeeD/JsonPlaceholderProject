@@ -1,15 +1,16 @@
-import { Typography } from "@mui/material";
+import {TodoList} from "../features/todos/components/TodoList";
+import {getTodos} from "../features/todos/api/todosApi";
+import {AppErrorBoundary, Loader} from "../shared";
+import { Suspense } from "react";
+
+const todosPromise = getTodos()
 
 export function TodosPage() {
     return (
-        <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Todos
-            </Typography>
-
-            <Typography color="text.secondary">
-                Тут будет список задач.
-            </Typography>
-        </>
+        <AppErrorBoundary>
+            <Suspense fallback={<Loader />}>
+                <TodoList todosPromise={todosPromise}/>
+            </Suspense>
+        </AppErrorBoundary>
     );
 }
