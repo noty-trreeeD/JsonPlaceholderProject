@@ -15,3 +15,7 @@ export function getPostComments(id: number) {
 export function getPostsByUserId(userId: number) {
     return apiClient(`/posts?${userId}`);
 }
+
+export function createPost() {
+
+}
