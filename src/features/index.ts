@@ -9,9 +9,11 @@ export {
     getPosts,
     getPostById,
     getPostComments,
-    getPostsByUserId
+    getPostsByUserId,
+    createPost,
 } from './posts/api/postsApi'
-export type { Post } from './posts/types/post'
+export { PostForm } from './posts/components/PostForm'
+export type { Post, CreatePostDto } from './posts/types/post'
 
 export { AuthorBadge } from './users/components/AuthorBadge'
 export { UserCard } from './users/components/UserCard'
