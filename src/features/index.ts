@@ -24,7 +24,7 @@ export type { PostFormValues } from "./posts/schemas/postFormSchema"
 export { AuthorBadge } from './users/components/AuthorBadge'
 export { UserCard } from './users/components/UserCard'
 export { UserList } from './users/components/UserList'
-export { getUsers, getUserById } from './users/api/UsersApi'
+export { getUsers, getUserById } from './users/api/usersApi'
 export type { User } from './users/types/user'
 export { UserDetailsCard } from './users/components/UserDetailsCard'
 

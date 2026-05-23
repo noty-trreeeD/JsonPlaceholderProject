@@ -3,7 +3,8 @@ import {
     getUserById,
     getPostsByUserId,
     UserDetailsCard,
-    type User, PostCard,
+    type User,
+    PostCard,
 } from "../features";
 import { useEffect, useState } from "react";
 import { Loader, ErrorMessage } from "../shared";

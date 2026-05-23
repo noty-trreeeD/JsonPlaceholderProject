@@ -1,5 +1,6 @@
 import { apiClient } from "../../../shared";
 import type { Post, CreatePostDto, UpdatePostDto } from "../types/post";
+import type { Comment as PostComment } from "../../comments/types/comment";
 
 export function getPosts():Promise<Post[]> {
     return apiClient<Post[]>("/posts");
@@ -9,12 +10,12 @@ export function getPostById(id: number):Promise<Post> {
     return apiClient<Post>(`/posts/${id}`);
 }
 
-export function getPostComments(id: number) {
-    return apiClient(`/posts/${id}/comments`);
+export function getPostComments(id: number): Promise<PostComment[]> {
+    return apiClient<PostComment[]>(`/posts/${id}/comments`);
 }
 
-export function getPostsByUserId(userId: number) {
-    return apiClient(`/posts?${userId}`);
+export function getPostsByUserId(userId: number): Promise<Post[]> {
+    return apiClient<Post[]>(`/posts?userId=${userId}`);
 }
 
 export function createPost(payload: CreatePostDto):Promise<Post> {
