@@ -1,15 +1,18 @@
 import { useParams } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import {
     PostDetailCard,
     getPostById,
     getPostComments,
-    CommentList, getUserById,
+    CommentList,
+    getUserById,
     type User
 } from "../features";
 import { useEffect, useState } from "react";
 import { Loader, ErrorMessage } from "../shared";
 import type { Comment as PostComment, Post } from "../features";
+import { Link as RouterLink } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 
 export function PostDetailsPage() {
     const { postId } = useParams();
@@ -60,9 +63,29 @@ export function PostDetailsPage() {
 
     return (
         <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Пост #{postId}
-            </Typography>
+            <Stack
+                direction="row"
+                sx={{
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    mb: 3,
+                }}
+            >
+                <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    Пост #{postId}
+                </Typography>
+
+                {post && (
+                    <Button
+                        component={RouterLink}
+                        to={`/posts/${post.id}/edit`}
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                    >
+                        Редактировать
+                    </Button>
+                )}
+            </Stack>
 
             {isLoading && <Loader />}
 

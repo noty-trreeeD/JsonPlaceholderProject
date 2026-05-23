@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
     Alert,
     Paper,
     Typography,
 } from "@mui/material";
-
-import { createPost, PostForm } from "../features";
-import type { PostFormValues } from "../features/posts/schemas/postFormSchema";
+import { type PostFormValues,
+    createPost,
+    PostForm
+} from "../features";
 
 export function CreatePostPage() {
     const navigate = useNavigate();
-
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     async function handleCreatePost(values: PostFormValues) {

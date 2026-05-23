@@ -5,8 +5,6 @@ export type Post = {
     body: string,
 }
 
-export type CreatePostDto = {
-    userId: number,
-    title: string,
-    body: string,
-}
+export type CreatePostDto = Omit<Post, "id">;
+
+export type UpdatePostDto = Omit<Post, "id">;

@@ -11,9 +11,15 @@ export {
     getPostComments,
     getPostsByUserId,
     createPost,
+    updatePost,
 } from './posts/api/postsApi'
 export { PostForm } from './posts/components/PostForm'
-export type { Post, CreatePostDto } from './posts/types/post'
+export type {
+    Post,
+    CreatePostDto,
+    UpdatePostDto
+} from './posts/types/post'
+export type { PostFormValues } from "./posts/schemas/postFormSchema"
 
 export { AuthorBadge } from './users/components/AuthorBadge'
 export { UserCard } from './users/components/UserCard'

@@ -1,5 +1,5 @@
 import { apiClient } from "../../../shared";
-import type { Post, CreatePostDto } from "../types/post";
+import type { Post, CreatePostDto, UpdatePostDto } from "../types/post";
 
 export function getPosts():Promise<Post[]> {
     return apiClient<Post[]>("/posts");
@@ -20,6 +20,13 @@ export function getPostsByUserId(userId: number) {
 export function createPost(payload: CreatePostDto):Promise<Post> {
     return apiClient<Post>(`/posts`, {
         method: "POST",
+        body: payload,
+    });
+}
+
+export function updatePost(id: number, payload: UpdatePostDto): Promise<Post> {
+    return apiClient<Post>(`/posts/${id}`, {
+        method: "PUT",
         body: payload,
     });
 }

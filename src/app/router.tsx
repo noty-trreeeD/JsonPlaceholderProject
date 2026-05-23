@@ -8,7 +8,8 @@ import {
     TodosPage,
     NotFoundPage,
     UserDetailsPage,
-    CreatePostPage
+    CreatePostPage,
+    UpdatePostPage
 } from "../pages";
 
 export const router = createBrowserRouter([
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
             {
                 path: "posts/create",
                 element: <CreatePostPage />
+            },
+            {
+                path: "posts/:postId/edit",
+                element: <UpdatePostPage />,
             },
             {
                 path: "users",
