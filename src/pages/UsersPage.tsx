@@ -1,15 +1,21 @@
-import { AppErrorBoundary, Loader } from "../shared";
-import { UserList, getUsers } from "../features";
-import { Suspense } from "react";
-
-const usersPromise = getUsers();
+import { ErrorMessage, Loader } from "../shared";
+import { getUsers, UserList} from "../features";
+import { useQuery } from "@tanstack/react-query";
 
 export function UsersPage() {
+    const usersQuery = useQuery({
+        queryKey: ['users'],
+        queryFn: getUsers,
+    });
+
+    if (usersQuery.isLoading) return <Loader />;
+    if (usersQuery.error) return <ErrorMessage error={"Error"} />;
+
+    const users = usersQuery.data ?? [];
+
+    if (users.length === 0) return <div>Пользователи не найдены</div>;
+
     return (
-        <AppErrorBoundary>
-            <Suspense fallback={<Loader />}>
-                <UserList usersPromise={usersPromise}/>
-            </Suspense>
-        </AppErrorBoundary>
+        <UserList users={users}/>
     );
 }

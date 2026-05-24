@@ -1,16 +1,23 @@
 import { TodoList } from "../features";
 import { getTodos } from "../features";
-import { AppErrorBoundary, Loader } from "../shared";
-import { Suspense } from "react";
-
-const todosPromise = getTodos()
+import { ErrorMessage, Loader } from "../shared";
+import { useQuery } from "@tanstack/react-query";
 
 export function TodosPage() {
+    const todosQuery = useQuery({
+        queryKey: ['todos'],
+        queryFn: getTodos,
+    })
+
+    if (todosQuery.isLoading) return <Loader />;
+
+    if (todosQuery.error) {
+        return <ErrorMessage error="Не удалось загрузить задачи" />;
+    }
+
+    const todos = todosQuery.data ?? [];
+
     return (
-        <AppErrorBoundary>
-            <Suspense fallback={<Loader />}>
-                <TodoList todosPromise={todosPromise}/>
-            </Suspense>
-        </AppErrorBoundary>
+        <TodoList todos={todos}/>
     );
 }

@@ -1,16 +1,14 @@
 import type { Todo } from "../types/todo";
-import { use, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { TodoCard } from "./TodoCard";
 import { TodoFilters, type TodoFilter } from "./TodoFilters";
 
 type TodoListProps = {
-    todosPromise: Promise<Todo[]>;
+    todos: Todo[];
 };
 
-export const TodoList = ({ todosPromise }: TodoListProps) => {
-    const todos = use(todosPromise);
-
+export const TodoList = ({ todos }: TodoListProps) => {
     const [filter, setFilter] = useState<TodoFilter>("all");
 
     const filteredTodos = useMemo(() => {

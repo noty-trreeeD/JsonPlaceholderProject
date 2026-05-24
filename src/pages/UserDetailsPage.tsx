@@ -3,79 +3,48 @@ import {
     getUserById,
     getPostsByUserId,
     UserDetailsCard,
-    type User,
     PostCard,
 } from "../features";
-import { useEffect, useState } from "react";
 import { Loader, ErrorMessage } from "../shared";
-import type { Post } from "../features";
 import { Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 export function UserDetailsPage() {
     const { userId } = useParams();
-    const [user, setUser] =useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
+    const id = Number(userId);
+    const isValidId = Boolean(userId) && !Number.isNaN(id);
 
-    useEffect(() => {
-        async function loadPostByPostId() {
-            try {
-                setIsLoading(true);
-                setError(null);
-                setPosts([]);
-                setUser(null);
+    const userQuery = useQuery({
+        queryKey: ["user", id],
+        queryFn: () => getUserById(id),
+        enabled: isValidId,
+    })
+    const postsQuery = useQuery({
+        queryKey: ["posts", "user", id],
+        queryFn: () => getPostsByUserId(id),
+        enabled: isValidId,
+    })
 
-                if (!userId) {
-                    throw new Error("UserId if not found");
-                }
+    if (postsQuery.isLoading ||  userQuery.isLoading) return <Loader />;
+    if (postsQuery.error || userQuery.error) return <ErrorMessage error={`Не удалось загрузить данные.`} />;
 
-                const id = Number(userId);
+    const user = userQuery.data
+    const posts = postsQuery.data
 
-                if (Number.isNaN(id)) {
-                    throw new Error("Uncorrected userId");
-                }
-
-                const [data, postsData] = await Promise.all([
-                    getUserById(id),
-                    getPostsByUserId(id),
-                ]);
-
-                setUser(data);
-                setPosts(postsData);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-            } finally {
-                setIsLoading(false);
-            }
-        }
-
-        loadPostByPostId();
-    }, [userId])
+    if (!user) return <ErrorMessage error={"Error"}/>;
+    if (!posts) return <Loader />;
 
     return (
         <>
-            {isLoading && <Loader />}
+            <UserDetailsCard user={user} />
 
-            {!isLoading && error && <ErrorMessage error={error} />}
+            <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
+                Посты пользователя
+            </Typography>
 
-            {!isLoading && !error && !user && (
-                <div>Пост не найден</div>
-            )}
-
-            {!isLoading && !error && user && (
-                <>
-                    <UserDetailsCard user={user} />
-
-                    <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
-                        Посты пользователя
-                    </Typography>
-
-                    {posts.map((post) => (
-                        <PostCard key={post.id} post={post} author={user} />
-                    ))}
-                </>
-            )}
+            {posts.map((post) => (
+                <PostCard key={post.id} post={post} author={user} />
+            ))}
         </>
     );
 }

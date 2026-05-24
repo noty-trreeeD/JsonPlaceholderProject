@@ -16,6 +16,11 @@ export function PostsPage() {
     if (postsQuery.isLoading || usersQuery.isLoading) return <Loader />;
     if (postsQuery.error || usersQuery.error) return <ErrorMessage error={`Не удалось загрузить данные.`} />;
 
+    const posts = postsQuery.data;
+    const users = usersQuery.data;
+
+    if (!users || !posts) return <Loader />;
+
     return (
         <>
             <Stack
@@ -39,8 +44,8 @@ export function PostsPage() {
                 </Button>
             </Stack>
             <PostList
-                posts={postsQuery.data ?? []}
-                users={usersQuery.data ?? []}
+                posts={posts}
+                users={users}
             />
         </>
     );
