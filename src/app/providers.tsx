@@ -4,6 +4,7 @@ import { CssBaseline } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { theme } from "./theme";
 import { queryClient } from "./queryClient";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 type ProvidersProps = {
     children: ReactNode;
@@ -12,6 +13,7 @@ type ProvidersProps = {
 export function Providers({ children }: ProvidersProps) {
     return (
         <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false}/>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 {children}
