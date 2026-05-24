@@ -3,7 +3,6 @@ import type { Post } from "../types/post";
 import { PostCard } from "./PostCard";
 import { Loader } from "../../../shared";
 import {
-    use,
     useState,
     useDeferredValue,
     useMemo,
@@ -12,8 +11,8 @@ import {
 import type {User} from "../../index";
 
 type PostListProps = {
-    postPromise: Promise<Post[]>;
-    usersPromise: Promise<User[]>;
+    posts: Post[];
+    users: User[];
 };
 
 const HeavyPostGrid = memo(function HeavyPostGrid({ posts, users }: { posts: Post[]; users: User[] }) {
@@ -51,10 +50,7 @@ const HeavyPostGrid = memo(function HeavyPostGrid({ posts, users }: { posts: Pos
     );
 });
 
-export const PostList = ({ postPromise, usersPromise }: PostListProps) => {
-    const posts = use(postPromise);
-    const users = use(usersPromise)
-
+export const PostList = ({ posts, users }: PostListProps) => {
     const [sortBy, setSortBy] = useState<"asc" | "desc">("asc");
 
     const deferredSortBy = useDeferredValue(sortBy);

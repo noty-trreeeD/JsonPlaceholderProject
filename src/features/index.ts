@@ -12,6 +12,7 @@ export {
     getPostsByUserId,
     createPost,
     updatePost,
+    deletePost,
 } from './posts/api/postsApi'
 export { PostForm } from './posts/components/PostForm'
 export type {

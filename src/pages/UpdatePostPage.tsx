@@ -1,70 +1,52 @@
-import {useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-    Alert,
     Paper,
     Typography,
 } from "@mui/material";
-import { updatePost, PostForm, type Post, getPostById } from "../features";
+import { updatePost, PostForm, getPostById } from "../features";
 import type { PostFormValues } from "../features";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ErrorMessage, Loader } from "../shared";
 
 export function UpdatePostPage() {
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { postId } = useParams();
     const id = Number(postId);
-    const [post, setPost] =useState<Post | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const isValidId = Boolean(postId) && !Number.isNaN(id);
+    const postQuery = useQuery({
+        queryKey: ['posts', id],
+        queryFn: () => getPostById(id),
+        enabled: isValidId,
+    })
 
-    useEffect(() => {
-        async function loadPostByPostId() {
-            try {
-                setIsLoading(true);
-                setError(null);
-                setPost(null);
-                setSuccessMessage(null);
-
-                if (!postId) {
-                    throw new Error("ID поста не найден");
-                }
-                if (Number.isNaN(id)) {
-                    throw new Error("Некорректный ID поста");
-                }
-
-                const data = await getPostById(id);
-
-                setPost(data);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-            } finally {
-                setIsLoading(false);
-            }
+    const updatePostMutation = useMutation({
+        mutationFn: (values: PostFormValues) => updatePost(id, values),
+        onSuccess: (updatedPost) => {
+            queryClient.invalidateQueries({
+                queryKey: ['posts']
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['posts', id],
+            })
+            navigate(`/posts/${updatedPost.id}`, {})
         }
-
-        loadPostByPostId();
-    }, [postId, id])
+    })
 
     async function handleUpdatePost(values: PostFormValues) {
-        try {
-            setError(null);
+        await updatePostMutation.mutateAsync(values);
+    }
 
-            if (!postId || Number.isNaN(id)) {
-                throw new Error("Некорректный ID поста");
-            }
+    if (postQuery.isLoading) return <Loader />;
+    if (postQuery.error) return <ErrorMessage error={`Не удалось загрузить данные.`} />;
 
-            const updatedPost = await updatePost(id, values);
-            console.log(updatedPost);
+    const post = postQuery.data;
 
-            setSuccessMessage(`Post edited. ID: ${updatedPost.id}. Check console log`);
-
-            setTimeout(() => {
-                navigate(`/posts/${id}`);
-            }, 1000);
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Не удалось обновить пост");
-        }
+    if (!post) {
+        return <div>Пост не найден</div>;
+    }
+    if (!isValidId) {
+        return <ErrorMessage error="Некорректный ID поста" />;
     }
 
     return (
@@ -72,41 +54,24 @@ export function UpdatePostPage() {
             <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
                 Edit post
             </Typography>
-
-            {successMessage && (
-                <Alert severity="success" sx={{ mb: 2 }}>
-                    {successMessage}
-                </Alert>
-            )}
-
-            {isLoading && <Loader />}
-
-            {!isLoading && error && <ErrorMessage error={error} />}
-
-            {!isLoading && !error && !post && (
-                <div>Пост не найден</div>
-            )}
-
-            {!isLoading && !error && post && (
-                <Paper
-                    variant="outlined"
-                    sx={{
-                        p: 3,
-                        borderRadius: 3,
-                        maxWidth: 720,
+            <Paper
+                variant="outlined"
+                sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    maxWidth: 720,
+                }}
+            >
+                <PostForm
+                    defaultValues={{
+                        title: post.title,
+                        body: post.body,
+                        userId: post.userId,
                     }}
-                >
-                    <PostForm
-                        defaultValues={{
-                            title: post.title,
-                            body: post.body,
-                            userId: post.userId,
-                        }}
-                        submitLabel="Save changes"
-                        onSubmit={handleUpdatePost}
-                    />
-                </Paper>
-            )}
+                    submitLabel="Save changes"
+                    onSubmit={handleUpdatePost}
+                />
+            </Paper>
         </>
     );
 }

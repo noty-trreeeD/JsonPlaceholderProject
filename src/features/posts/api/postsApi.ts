@@ -31,3 +31,9 @@ export function updatePost(id: number, payload: UpdatePostDto): Promise<Post> {
         body: payload,
     });
 }
+
+export function deletePost(id: number): Promise<void> {
+    return apiClient<void>(`/posts/${id}`, {
+        method: "DELETE",
+    })
+}

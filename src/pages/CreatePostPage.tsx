@@ -1,27 +1,34 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    Alert,
     Paper,
     Typography,
 } from "@mui/material";
-import { type PostFormValues,
+import {
+    type PostFormValues,
     createPost,
-    PostForm
+    PostForm,
 } from "../features";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ErrorMessage } from "../shared";
 
 export function CreatePostPage() {
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    const createPostMutation = useMutation({
+        mutationFn: createPost,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['posts']
+            })
+            navigate('/posts')
+
+        }
+    })
 
     async function handleCreatePost(values: PostFormValues) {
-        const createdPost = await createPost(values);
-
-        setSuccessMessage(`Пост создан. ID: ${createdPost.id}`);
-
-        setTimeout(() => {
-            navigate("/posts");
-        }, 1000);
+        await createPostMutation.mutateAsync(values);
+        console.log(values);
     }
 
     return (
@@ -29,13 +36,9 @@ export function CreatePostPage() {
             <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
                 Создать пост
             </Typography>
-
-            {successMessage && (
-                <Alert severity="success" sx={{ mb: 2 }}>
-                    {successMessage}
-                </Alert>
+            {createPostMutation.error && (
+                <ErrorMessage error="Не удалось создать пост" />
             )}
-
             <Paper
                 variant="outlined"
                 sx={{
