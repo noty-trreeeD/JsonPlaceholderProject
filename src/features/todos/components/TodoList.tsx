@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { TodoCard } from "./TodoCard";
 import { TodoFilters, type TodoFilter } from "./TodoFilters";
+import {EmptyState} from "../../../shared";
 
 type TodoListProps = {
     todos: Todo[];
@@ -18,6 +19,11 @@ export const TodoList = ({ todos }: TodoListProps) => {
             return true;
         });
     }, [todos, filter]);
+
+    if (filteredTodos.length === 0) return <EmptyState
+        title="Ничего не найдено"
+        description="Попробуйте изменить поиск или фильтры."
+    />
 
     return (
         <>

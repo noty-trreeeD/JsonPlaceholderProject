@@ -1,12 +1,18 @@
-import { Grid } from "@mui/material";
+import { Grid} from "@mui/material";
 import type { User } from "../types/user";
 import { UserCard } from "./UserCard";
+import { EmptyState } from "../../../shared";
 
 type UsersListProps = {
     users: User[];
 };
 
 export const UserList = ({ users }: UsersListProps) => {
+    if (users.length === 0) return <EmptyState
+        title="Users пока нет"
+        description="Users undefined."
+    />
+
     return (
         <Grid container spacing={2}>
             {users.map((user) => (

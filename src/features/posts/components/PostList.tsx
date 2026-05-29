@@ -1,7 +1,8 @@
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Button } from "@mui/material";
 import type { Post } from "../types/post";
 import { PostCard } from "./PostCard";
-import { Loader } from "../../../shared";
+import { EmptyState, Loader } from "../../../shared";
+import { Link as RouterLink } from "react-router-dom";
 import {
     useState,
     useDeferredValue,
@@ -66,6 +67,24 @@ export const PostList = ({ posts, users }: PostListProps) => {
     };
 
     const isStale = sortBy !== deferredSortBy;
+
+    if (posts.length === 0) {
+        return (
+            <EmptyState
+                title="Постов пока нет"
+                description="Создайте первый пост."
+                action={
+                    <Button
+                        component={RouterLink}
+                        to="/posts/create"
+                        variant="contained"
+                    >
+                        Создать пост
+                    </Button>
+                }
+            />
+        );
+    }
 
     return (
         <Grid container spacing={2}>
