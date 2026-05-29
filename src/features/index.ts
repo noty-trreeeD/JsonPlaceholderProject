@@ -5,6 +5,8 @@ export type { Comment } from './comments/types/comment'
 export { PostCard } from './posts/components/PostCard'
 export { PostList } from './posts/components/PostList'
 export { PostDetailCard } from './posts/components/PostDetailCard'
+export { PostListSkeleton } from './posts/components/PostListSkeleton'
+export { PostDetailsSkeleton } from './posts/components/PostDetailsSkeleton'
 export {
     getPosts,
     getPostById,

@@ -1,4 +1,4 @@
-import { PostList, getPosts, getUsers } from "../features";
+import { PostList, getPosts, getUsers, PostListSkeleton } from "../features";
 import { ErrorMessage, Loader } from "../shared"
 import { Link as RouterLink } from "react-router-dom";
 import { Button, Stack, Typography } from "@mui/material";
@@ -13,7 +13,7 @@ export function PostsPage() {
         queryKey: ['users'],
         queryFn: getUsers,
     })
-    if (postsQuery.isLoading || usersQuery.isLoading) return <Loader />;
+    if (postsQuery.isLoading || usersQuery.isLoading) return <PostListSkeleton />;
     if (postsQuery.error || usersQuery.error) return <ErrorMessage error={`Не удалось загрузить данные.`} />;
 
     const posts = postsQuery.data;

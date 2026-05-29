@@ -7,8 +7,9 @@ import {
     CommentList,
     getUserById,
     deletePost,
+    PostDetailsSkeleton,
 } from "../features";
-import { Loader, ErrorMessage, useToastStore, ConfirmDialog } from "../shared";
+import { ErrorMessage, useToastStore, ConfirmDialog } from "../shared";
 import { Link as RouterLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -53,7 +54,7 @@ export function PostDetailsPage() {
         }
     })
     if (!isValidId) return <ErrorMessage error="Некорректный ID поста" />;
-    if (postQuery.isLoading || commentsQuery.isLoading || userQuery.isLoading) return <Loader />;
+    if (postQuery.isLoading || commentsQuery.isLoading || userQuery.isLoading) return <PostDetailsSkeleton />;
     if (postQuery.error || commentsQuery.error || userQuery.error) return <ErrorMessage error={`Не удалось загрузить данные.`} />;
 
     const post = postQuery.data;
