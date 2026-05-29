@@ -9,20 +9,22 @@ import {
     PostForm,
 } from "../features";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ErrorMessage } from "../shared";
+import { ErrorMessage, useToastStore } from "../shared";
 
 export function CreatePostPage() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const showToast = useToastStore((state) => state.showToast);
 
     const createPostMutation = useMutation({
         mutationFn: createPost,
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ['posts']
-            })
+            queryClient.invalidateQueries({queryKey: ['posts']})
+            showToast("Successfully created post", "success");
             navigate('/posts')
-
+        },
+        onError: () => {
+                showToast("Failed to create post", "error");
         }
     })
 

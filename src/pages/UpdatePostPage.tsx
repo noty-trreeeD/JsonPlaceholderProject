@@ -6,7 +6,7 @@ import {
 import { updatePost, PostForm, getPostById } from "../features";
 import type { PostFormValues } from "../features";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ErrorMessage, Loader } from "../shared";
+import { ErrorMessage, Loader, useToastStore } from "../shared";
 
 export function UpdatePostPage() {
     const queryClient = useQueryClient();
@@ -14,6 +14,8 @@ export function UpdatePostPage() {
     const { postId } = useParams();
     const id = Number(postId);
     const isValidId = Boolean(postId) && !Number.isNaN(id);
+    const showToast = useToastStore((state) => state.showToast);
+
     const postQuery = useQuery({
         queryKey: ['posts', id],
         queryFn: () => getPostById(id),
@@ -23,13 +25,13 @@ export function UpdatePostPage() {
     const updatePostMutation = useMutation({
         mutationFn: (values: PostFormValues) => updatePost(id, values),
         onSuccess: (updatedPost) => {
-            queryClient.invalidateQueries({
-                queryKey: ['posts']
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['posts', id],
-            })
+            queryClient.invalidateQueries({queryKey: ['posts']})
+            queryClient.invalidateQueries({queryKey: ['posts', id],})
+            showToast("Post successfully updated!", "success");
             navigate(`/posts/${updatedPost.id}`, {})
+        },
+        onError:() => {
+            showToast("Error updating post!", "error");
         }
     })
 
