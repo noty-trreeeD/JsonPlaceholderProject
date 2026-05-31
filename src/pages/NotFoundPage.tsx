@@ -1,15 +1,12 @@
-import { Typography } from "@mui/material";
+import { PageHeader } from "../shared";
 
 export function NotFoundPage() {
     return (
         <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Страница не найдена
-            </Typography>
-
-            <Typography color="text.secondary">
-                Такой страницы не существует.
-            </Typography>
+            <PageHeader
+                title={"Page not found"}
+                subtitle={"Page not found"}
+            />
         </>
     );
 }

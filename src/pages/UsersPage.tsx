@@ -1,4 +1,4 @@
-import { ErrorMessage, Loader } from "../shared";
+import { ErrorMessage, Loader, PageHeader } from "../shared";
 import { getUsers, UserList} from "../features";
 import { useQuery } from "@tanstack/react-query";
 
@@ -16,6 +16,12 @@ export function UsersPage() {
     if (users.length === 0) return <div>Пользователи не найдены</div>;
 
     return (
-        <UserList users={users}/>
+        <>
+            <PageHeader
+                title={"Users page"}
+            />
+            <UserList users={users}/>
+        </>
+
     );
 }

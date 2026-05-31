@@ -1,12 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import {
-    Paper,
-    Typography,
-} from "@mui/material";
+import { Paper } from "@mui/material";
 import { updatePost, PostForm, getPostById } from "../features";
 import type { PostFormValues } from "../features";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ErrorMessage, Loader, useToastStore } from "../shared";
+import { ErrorMessage, Loader, PageHeader, useToastStore } from "../shared";
 
 export function UpdatePostPage() {
     const queryClient = useQueryClient();
@@ -53,9 +50,9 @@ export function UpdatePostPage() {
 
     return (
         <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Edit post
-            </Typography>
+            <PageHeader
+                title={"Edit post"}
+            />
             <Paper
                 variant="outlined"
                 sx={{

@@ -1,7 +1,7 @@
 import { PostList, getPosts, getUsers, PostListSkeleton } from "../features";
-import { ErrorMessage, Loader } from "../shared"
+import { ErrorMessage, Loader, PageHeader } from "../shared"
 import { Link as RouterLink } from "react-router-dom";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 export function PostsPage() {
@@ -23,26 +23,18 @@ export function PostsPage() {
 
     return (
         <>
-            <Stack
-                direction="row"
-                sx={{
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mb: 3,
-                }}
-            >
-                <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                    Посты
-                </Typography>
-
-                <Button
-                    component={RouterLink}
-                    to="/posts/create"
-                    variant="contained"
-                >
-                    Создать пост
-                </Button>
-            </Stack>
+            <PageHeader
+                title="Посты"
+                action={
+                    <Button
+                        component={RouterLink}
+                        to="/posts/create"
+                        variant="contained"
+                    >
+                        Создать пост
+                    </Button>
+                }
+            />
             <PostList
                 posts={posts}
                 users={users}

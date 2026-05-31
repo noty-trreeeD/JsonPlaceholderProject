@@ -1,15 +1,12 @@
-import { Typography } from "@mui/material";
+import { PageHeader } from "../shared";
 
 export function HomePage() {
     return (
         <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Главная
-            </Typography>
-
-            <Typography color="text.secondary">
-                Мини-приложение для практики работы с JSONPlaceholder.
-            </Typography>
+            <PageHeader
+                title={"Home page"}
+                subtitle={"Select another page"}
+            />
         </>
     );
 }

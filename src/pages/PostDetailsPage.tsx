@@ -9,7 +9,13 @@ import {
     deletePost,
     PostDetailsSkeleton,
 } from "../features";
-import { ErrorMessage, useToastStore, ConfirmDialog } from "../shared";
+import {
+    ErrorMessage,
+    useToastStore,
+    ConfirmDialog,
+    PageHeader,
+    EmptyState
+} from "../shared";
 import { Link as RouterLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -65,52 +71,45 @@ export function PostDetailsPage() {
         deletePostMutation.mutate();
     }
 
-    if (!post) {
-        return <div>Пост не найден</div>;
-    }
+    if (!post) return <EmptyState title={"Post not found"} description={"Error"} />;
 
     return (
         <>
-            <Stack
-                direction="row"
-                sx={{
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mb: 3,
-                }}
-            >
-                <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                    Пост #{postId}
-                </Typography>
-                <Box>
-                    <Button
-                        component={RouterLink}
-                        to={`/posts/${id}/edit`}
-                        variant="contained"
-                        startIcon={<EditIcon />}
-                    >
-                        Редактировать
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => setIsConfirmOpen(true)}
-                        disabled={deletePostMutation.isPending}
-                    >
-                        Удалить
-                    </Button>
-                    <ConfirmDialog
-                        open={isConfirmOpen}
-                        title="Удалить пост?"
-                        description="Это действие нельзя будет отменить."
-                        confirmText="Удалить"
-                        loading={deletePostMutation.isPending}
-                        onClose={() => setIsConfirmOpen(false)}
-                        onConfirm={handleDeletePost}
-                    />
-                </Box>
-            </Stack>
+            <PageHeader
+                title={`Post: ${postId}`}
+                action={
+                    <Stack>
+                        <Box>
+                            <Button
+                                component={RouterLink}
+                                to={`/posts/${id}/edit`}
+                                variant="contained"
+                                startIcon={<EditIcon />}
+                            >
+                                Редактировать
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => setIsConfirmOpen(true)}
+                                disabled={deletePostMutation.isPending}
+                            >
+                                Удалить
+                            </Button>
+                            <ConfirmDialog
+                                open={isConfirmOpen}
+                                title="Удалить пост?"
+                                description="Это действие нельзя будет отменить."
+                                confirmText="Удалить"
+                                loading={deletePostMutation.isPending}
+                                onClose={() => setIsConfirmOpen(false)}
+                                onConfirm={handleDeletePost}
+                            />
+                        </Box>
+                    </Stack>
+                }
+            />
             <PostDetailCard post={post} author={author} />
             <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
                 Комментарии

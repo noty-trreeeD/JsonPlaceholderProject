@@ -1,15 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import {
-    Paper,
-    Typography,
-} from "@mui/material";
+import { Paper } from "@mui/material";
 import {
     type PostFormValues,
     createPost,
     PostForm,
 } from "../features";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ErrorMessage, useToastStore } from "../shared";
+import { ErrorMessage, PageHeader, useToastStore } from "../shared";
 
 export function CreatePostPage() {
     const queryClient = useQueryClient();
@@ -35,12 +32,8 @@ export function CreatePostPage() {
 
     return (
         <>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-                Создать пост
-            </Typography>
-            {createPostMutation.error && (
-                <ErrorMessage error="Не удалось создать пост" />
-            )}
+            <PageHeader title={"Create Post"}/>
+            {createPostMutation.error && (<ErrorMessage error="Не удалось создать пост" />)}
             <Paper
                 variant="outlined"
                 sx={{

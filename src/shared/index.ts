@@ -6,3 +6,4 @@ export { AppErrorBoundary } from './ui/AppErrorBoundary'
 export { useToastStore } from './store/toastStore'
 export { AppSnackbar } from './ui/AppSnackbar'
 export { ConfirmDialog } from "./ui/ConfirmDialog";
+export { PageHeader } from './ui/PageHeader'

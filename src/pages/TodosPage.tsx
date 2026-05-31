@@ -1,6 +1,6 @@
 import { TodoList } from "../features";
 import { getTodos } from "../features";
-import { ErrorMessage, Loader } from "../shared";
+import { ErrorMessage, Loader, PageHeader } from "../shared";
 import { useQuery } from "@tanstack/react-query";
 
 export function TodosPage() {
@@ -18,6 +18,12 @@ export function TodosPage() {
     const todos = todosQuery.data ?? [];
 
     return (
-        <TodoList todos={todos}/>
+        <>
+            <PageHeader
+                title={"Todos page"}
+            />
+            <TodoList todos={todos}/>
+        </>
+
     );
 }
